@@ -302,6 +302,15 @@ def edit_profile(profile_clear_path, skull_upgrades, *args, remove=False, **kwar
                 print(current_state)
                 print("skullUpgrades updated!")
 
+    # Write our new etree
+    tree.write("profiles_clear.xml")
+
+    # Fix missing EOL at the end of the file not accepted
+    # by tinyxml2 library used by the game, and causing profile reset...
+    with open("profiles_clear.xml", "rb+") as f_d:
+        f_d.seek(0, 2)  # 0 bytes from the end
+        f_d.write(b"\n")
+
 
 def args_to_param(args):
     """Return argparse namespace as a dict {variable name: value}"""
