@@ -1,4 +1,4 @@
-A savegame editor for Orcs Must Die! Tower Defense game.
+OMD Profile Editor is a savegame editor for Orcs Must Die! Tower Defense game (2011).
 
 Nobody asked for it but here it is anyway;
 a proof of concept for editing the game's obfuscated profiles.
