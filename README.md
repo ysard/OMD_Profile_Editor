@@ -48,6 +48,9 @@ Working python 3.10+ installation (3.6+ if you remove some typing annotations).
 Dependencies:
 
     $ pip install argparse
+    # or
+    $ pip install -r requirements.txt
+
 
 # Examples
 
