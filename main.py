@@ -78,8 +78,6 @@ import xml.etree.ElementTree as ET
 # Custom imports
 import argparse
 
-PATH = "Orcs Must Die!/Build/release/Alex_swarm/profiles.xml"
-# PATH = "Orcs Must Die!/Build/release/Alex_swarm/profiles100%.xml"
 
 MAPPING = {
     0x4b: 'a',
@@ -164,7 +162,6 @@ MAPPING = {
     # '0x??': '?',
     0x56: "_",
 }
-
 
 SKULLUPGRADES = {
     "1": "mur de flèches étendu",
@@ -361,8 +358,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    exit()
-    decrypt(PATH)
-    input("pause editing...")
-    crypt("Orcs Must Die!/Build/release/Alex_swarm/profiles_clear.xml")
 
