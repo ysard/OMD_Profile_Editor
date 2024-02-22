@@ -202,16 +202,16 @@ def decrypt(profile, *args, skull_upgrades=None, **kwargs):
 
     # print(text)
     profile_clear_path = Path(profile_path.parent / "profiles_clear.xml")
-    profile_clear_path.write_text(text)
+    profile_clear_path.write_text(text, encoding="utf8")
 
     if skull_upgrades:
         edit_profile(profile_clear_path, skull_upgrades, *args, **kwargs)
 
 
-def crypt(profile_clear, *args, **kwargs):
+def crypt(profile, *args, **kwargs):
     """Encrypt the clear XML file to a playable profile"""
-    profile_clear_path = Path(profile_clear)
-    text = profile_clear_path.read_text()
+    profile_clear_path = Path(profile)
+    text = profile_clear_path.read_text(encoding="utf8")
 
     rev_mapping = {v: k for k, v in MAPPING.items()}
 
@@ -219,7 +219,7 @@ def crypt(profile_clear, *args, **kwargs):
         data = bytes(rev_mapping[char] for char in text)
     except KeyError as e:
         print("Error: Character not known in the charset:", e)
-        raise SystemExit(42)
+        raise SystemExit(42) from e
 
     Path(profile_clear_path.parent / "profiles.xml").write_bytes(data)
 
@@ -240,7 +240,7 @@ def show_skull_upgrades(upgrades) -> list:
     return [SKULLUPGRADES[upgr] for upgr in upgrades]
 
 
-def edit_profile(profile_clear_path, skull_upgrades, remove=False, *args, **kwargs):
+def edit_profile(profile_clear_path, skull_upgrades, *args, remove=False, **kwargs):
     """Edit the xml file by adding or removing the given upgrades
 
     :param skull_upgrades: Iterable of skull upgrade ids.
