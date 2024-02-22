@@ -274,12 +274,19 @@ def edit_profile(profile_clear_path, skull_upgrades, *args, remove=False, **kwar
                 else:
                     upgrades.update(skull_upgrades)
 
-                # Clear current data elements
+                # Clear current data elements (and entry attribs...)
                 entry.clear()
+                entry.set("key", "SkullUpgrades")
 
                 # Replace by updated set of upgrades
                 for upgrade in upgrades:
-                    ET.SubElement(entry, "Data").text = upgrade
+                    elem = ET.SubElement(entry, "Data", attrib={"type": "Integer"})
+                    elem.text = upgrade
+
+                # Try to pretty-print the Entry element and its children
+                # But still missing EOL for the end tag.
+                # PS: Python 3.9+ only
+                ET.indent(entry, space="\t", level=2)
 
                 # print("new upgrades:", upgrades)
                 # print(entry.attrib, upgrades)
