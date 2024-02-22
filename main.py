@@ -228,7 +228,13 @@ def show_skull_upgrades(upgrades) -> list:
 
 
 def edit_profile(profile_clear_path, skullUpgrades, remove=False, *args, **kwargs):
+    """Edit the xml file by adding or removing the given upgrades
 
+    :param skullUpgrades: Iterable of skull upgrade ids.
+    :key remove: Remove the given upgrades (Default: False)
+    :type remove: <list <str>>
+    :type remove: <bool>
+    """
     # Cleaning userland data
     skullUpgrades = SKULLUPGRADES.keys() & set(skullUpgrades)
 
