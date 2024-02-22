@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# OMD_profile_editor a savegame editor for Orcs Must Die! Tower Defense game.
+# OMD Profile Editor a savegame editor for Orcs Must Die! Tower Defense game.
 # Copyright (C) 2024  Ysard
 #
 # This program is free software: you can redistribute it and/or modify
