@@ -75,90 +75,91 @@ SkullUpgrades
 # Standard imports
 from pathlib import Path
 import xml.etree.ElementTree as ET
+
 # Custom imports
 import argparse
 
 
 MAPPING = {
-    0x4b: 'a',
-    0x48: 'b',
-    0x49: 'c',
-    0x4e: 'd',
-    0x4f: 'e',
-    0x4c: 'f',
-    0x4d: 'g',
-    0x42: 'h',
-    0x43: 'i',
-    0x40: 'j',
-    0x41: 'k',
-    0x46: 'l',
-    0x47: 'm',
-    0x44: 'n',
-    0x45: 'o',
-    0x5a: 'p',
-    0x5b: 'q',
-    0x58: 'r',
-    0x59: 's',
-    0x5e: 't',
-    0x5f: 'u',
-    0x5c: 'v',
-    0x5d: 'w',
-    0x52: 'x',
-    0x53: 'y',
-    0x50: 'z',
-    0x6b: 'A',
-    0x68: 'B',
-    0x69: 'C',
-    0x6e: 'D',
-    0x6f: 'E',
-    0x6c: 'F',
-    0x6d: 'G',
-    0x62: 'H',
-    0x63: 'I',
-    0x60: 'J',
-    0x61: 'K',
-    0x66: 'L',
-    0x67: 'M',
-    0x64: 'N',
-    0x65: 'O',
-    0x7a: 'P',
-    0x7b: 'Q',
-    0x78: 'R',
-    0x79: 'S',
-    0x7e: 'T',
-    0x7f: 'U',
-    0x7c: 'V',
-    0x7d: 'W',
-    0x72: 'X',
-    0x73: 'Y',
-    0x70: 'Z',
+    0x4B: "a",
+    0x48: "b",
+    0x49: "c",
+    0x4E: "d",
+    0x4F: "e",
+    0x4C: "f",
+    0x4D: "g",
+    0x42: "h",
+    0x43: "i",
+    0x40: "j",
+    0x41: "k",
+    0x46: "l",
+    0x47: "m",
+    0x44: "n",
+    0x45: "o",
+    0x5A: "p",
+    0x5B: "q",
+    0x58: "r",
+    0x59: "s",
+    0x5E: "t",
+    0x5F: "u",
+    0x5C: "v",
+    0x5D: "w",
+    0x52: "x",
+    0x53: "y",
+    0x50: "z",
+    0x6B: "A",
+    0x68: "B",
+    0x69: "C",
+    0x6E: "D",
+    0x6F: "E",
+    0x6C: "F",
+    0x6D: "G",
+    0x62: "H",
+    0x63: "I",
+    0x60: "J",
+    0x61: "K",
+    0x66: "L",
+    0x67: "M",
+    0x64: "N",
+    0x65: "O",
+    0x7A: "P",
+    0x7B: "Q",
+    0x78: "R",
+    0x79: "S",
+    0x7E: "T",
+    0x7F: "U",
+    0x7C: "V",
+    0x7D: "W",
+    0x72: "X",
+    0x73: "Y",
+    0x70: "Z",
     # '0x?!': '!',
     # '0x?&': '&',
     0x08: '"',
-    0x05: '/',
-    0x16: '<',
-    0x17: '=',
-    0x14: '>',
-    0x1a: '0',
-    0x1b: '1',
-    0x18: '2',
-    0x19: '3',
-    0x1e: '4',
-    0x1f: '5',
-    0x1c: '6',
-    0x1d: '7',
-    0x12: '8',
-    0x13: '9',
-    0x0a: ' ',
-    0x23: '\t',
-    0x20: '\n',
+    0x05: "/",
+    0x16: "<",
+    0x17: "=",
+    0x14: ">",
+    0x1A: "0",
+    0x1B: "1",
+    0x18: "2",
+    0x19: "3",
+    0x1E: "4",
+    0x1F: "5",
+    0x1C: "6",
+    0x1D: "7",
+    0x12: "8",
+    0x13: "9",
+    0x0A: " ",
+    0x23: "\t",
+    0x20: "\n",
     # "0x?'": "'",
     # '0x?(': '(',
     # '0x?)': ')',
     # '0x?*': '*',
     # '0x?+': '+',
-    0x75: '-', # ??????
-    0x04: '.',
+    0x75: "-",  # ??????
+    0x04: ".",
     # '0x??': '?',
     0x56: "_",
 }
@@ -314,14 +315,12 @@ def main():
     )
     parser_decrypt.set_defaults(func=decrypt)
 
-    skull_group = parser_decrypt.add_argument_group(
-        title="Update SkullUpgrades set"
-    )
+    skull_group = parser_decrypt.add_argument_group(title="Update SkullUpgrades set")
     skull_group.add_argument(
         "-r",
         "--remove",
         help="Remove the upgrades (Add by default)",
-        action='store_true',
+        action="store_true",
     )
     skull_group.add_argument(
         "-s",
@@ -329,7 +328,7 @@ def main():
         help="Enable upgrades to the profiles. Items must be space separated. "
         + ", ".join(":".join(item) for item in SKULLUPGRADES.items()),
         nargs="*",
-        default=tuple()
+        default=tuple(),
     )
 
     parser_encrypt = subparsers.add_parser(
@@ -339,10 +338,7 @@ def main():
     )
     parser_encrypt.set_defaults(func=crypt)
     parser_encrypt.add_argument(
-        "-p",
-        "--profile",
-        help="Input profile file.",
-        default="profiles_clear.xml"
+        "-p", "--profile", help="Input profile file.", default="profiles_clear.xml"
     )
 
     # Get program args and launch associated command
@@ -358,4 +354,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
