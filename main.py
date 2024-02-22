@@ -190,7 +190,7 @@ SKULLUPGRADES = {
 }
 
 
-def decrypt(profile, skullUpgrades=None, *args, **kwargs):
+def decrypt(profile, skull_upgrades=None, *args, **kwargs):
     """Decrypt the original profile and export it to a clear XML file"""
     profile_path = Path(profile)
     data = profile_path.read_bytes()
@@ -204,8 +204,8 @@ def decrypt(profile, skullUpgrades=None, *args, **kwargs):
     profile_clear_path = Path(profile_path.parent / "profiles_clear.xml")
     profile_clear_path.write_text(text)
 
-    if skullUpgrades:
-        edit_profile(profile_clear_path, skullUpgrades, *args, **kwargs)
+    if skull_upgrades:
+        edit_profile(profile_clear_path, skull_upgrades, *args, **kwargs)
 
 
 def crypt(profile_clear, *args, **kwargs):
@@ -240,20 +240,20 @@ def show_skull_upgrades(upgrades) -> list:
     return [SKULLUPGRADES[upgr] for upgr in upgrades]
 
 
-def edit_profile(profile_clear_path, skullUpgrades, remove=False, *args, **kwargs):
+def edit_profile(profile_clear_path, skull_upgrades, remove=False, *args, **kwargs):
     """Edit the xml file by adding or removing the given upgrades
 
-    :param skullUpgrades: Iterable of skull upgrade ids.
+    :param skull_upgrades: Iterable of skull upgrade ids.
     :key remove: Remove the given upgrades (Default: False)
     :type remove: <list <str>>
     :type remove: <bool>
     """
     # Cleaning userland data
-    skullUpgrades = SKULLUPGRADES.keys() & set(skullUpgrades)
+    skull_upgrades = SKULLUPGRADES.keys() & set(skull_upgrades)
 
     # Display todo
     alert = "Removing" if remove else "Adding"
-    print("{}: '{}'".format(alert, "', '".join(show_skull_upgrades(skullUpgrades))))
+    print("{}: '{}'".format(alert, "', '".join(show_skull_upgrades(skull_upgrades))))
 
     # Modification of XML Element Tree
     tree = ET.parse(profile_clear_path)
@@ -267,9 +267,9 @@ def edit_profile(profile_clear_path, skullUpgrades, remove=False, *args, **kwarg
                 upgrades = get_skull_upgrades(entry)
 
                 if remove:
-                    upgrades -= skullUpgrades
+                    upgrades -= skull_upgrades
                 else:
-                    upgrades.update(skullUpgrades)
+                    upgrades.update(skull_upgrades)
 
                 # Clear current data elements
                 entry.clear()
@@ -324,7 +324,7 @@ def main():
     )
     skull_group.add_argument(
         "-s",
-        "--skullUpgrades",
+        "--skull-upgrades",
         help="Enable upgrades to the profiles. Items must be space separated. "
         + ", ".join(":".join(item) for item in SKULLUPGRADES.items()),
         nargs="*",
