@@ -219,8 +219,24 @@ def get_skull_upgrades(element):
     return {data.text for data in element.iter("Data")}
 
 
-def edit_profile(profile_clear_path, skullUpgrades, add=False, *args, **kwargs):
+def show_skull_upgrades(upgrades) -> list:
+    """Return list of upgrades significations
 
+    .. warning:: No verification of userland ids
+    """
+    return [SKULLUPGRADES[upgr] for upgr in upgrades]
+
+
+def edit_profile(profile_clear_path, skullUpgrades, remove=False, *args, **kwargs):
+
+    # Cleaning userland data
+    skullUpgrades = SKULLUPGRADES.keys() & set(skullUpgrades)
+
+    # Display todo
+    alert = "Removing" if remove else "Adding"
+    print("{}: '{}'".format(alert, "', '".join(show_skull_upgrades(skullUpgrades))))
+
+    # Modification of XML Element Tree
     tree = ET.parse(profile_clear_path)
     root = tree.getroot()
 
@@ -231,10 +247,10 @@ def edit_profile(profile_clear_path, skullUpgrades, add=False, *args, **kwargs):
             if entry.get("key") == "SkullUpgrades":
                 upgrades = get_skull_upgrades(entry)
 
-                if add:
-                    upgrades.update(skullUpgrades)
+                if remove:
+                    upgrades -= skullUpgrades
                 else:
-                    upgrades -= set(skullUpgrades)
+                    upgrades.update(skullUpgrades)
 
                 # Clear current data elements
                 entry.clear()
@@ -247,7 +263,11 @@ def edit_profile(profile_clear_path, skullUpgrades, add=False, *args, **kwargs):
                 # print(entry.attrib, upgrades)
                 # for data in entry.iter("Data"):
                 #     print(data.text)
+                current_state = "'{}'".format(
+                    "', '".join(show_skull_upgrades(upgrades))
+                )
 
+                print(current_state)
                 print("skullUpgrades updated!")
 
 
@@ -275,12 +295,21 @@ def main():
         default="profiles.xml",
     )
     parser_decrypt.set_defaults(func=decrypt)
-    parser_decrypt.add_argument(
+
+    skull_group = parser_decrypt.add_argument_group(
+        title="Update SkullUpgrades set"
+    )
+    skull_group.add_argument(
+        "-r",
+        "--remove",
+        help="Remove the upgrades (Add by default)",
+        action='store_true',
+    )
+    skull_group.add_argument(
         "-s",
         "--skullUpgrades",
         help="Enable upgrades to the profiles. Items must be space separated. "
-        + ", ".join(":".join(item) for item in SKULLUPGRADES.items())
-        ,
+        + ", ".join(":".join(item) for item in SKULLUPGRADES.items()),
         nargs="*",
         default=tuple()
     )
