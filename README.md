@@ -43,7 +43,7 @@ Encrypt usage:
 
 # Requirements
 
-Working python 3.10+ installation (3.6+ if you remove some typing annotations).
+Working Python 3.10+ installation (3.6+ if you remove some typing hints).
 
 Dependencies:
 
