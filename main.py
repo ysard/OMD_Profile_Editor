@@ -190,7 +190,7 @@ SKULLUPGRADES = {
 }
 
 
-def decrypt(profile, skull_upgrades=None, *args, **kwargs):
+def decrypt(profile, *args, skull_upgrades=None, **kwargs):
     """Decrypt the original profile and export it to a clear XML file"""
     profile_path = Path(profile)
     data = profile_path.read_bytes()
