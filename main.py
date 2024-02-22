@@ -307,9 +307,8 @@ def edit_profile(profile_clear_path, skull_upgrades, *args, remove=False, **kwar
 
     # Fix missing EOL at the end of the file not accepted
     # by tinyxml2 library used by the game, and causing profile reset...
-    with open("profiles_clear.xml", "rb+") as f_d:
-        f_d.seek(0, 2)  # 0 bytes from the end
-        f_d.write(b"\n")
+    with open("profiles_clear.xml", "a") as f_d:
+        f_d.write("\n")
 
 
 def args_to_param(args):
