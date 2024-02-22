@@ -59,6 +59,7 @@ SkullUpgrades
 """
 # Standard imports
 from pathlib import Path
+import xml.etree.ElementTree as ET
 # Custom imports
 import argparse
 
@@ -190,6 +191,9 @@ def decrypt(profile, skullUpgrades=None, *args, **kwargs):
     profile_clear_path = Path(profile_path.parent / "profiles_clear.xml")
     profile_clear_path.write_text(text)
 
+    if skullUpgrades:
+        edit_profile(profile_clear_path, skullUpgrades, *args, **kwargs)
+
 
 def crypt(profile_clear, *args, **kwargs):
     """Encrypt the clear XML file to a playable profile"""
@@ -206,6 +210,45 @@ def crypt(profile_clear, *args, **kwargs):
 
     Path(profile_clear_path.parent / "profiles.xml").write_bytes(data)
 
+
+def get_skull_upgrades(element):
+    """Get set of enabled skullupgrades for each profile
+
+    :rtype: <list <set <str>>>
+    """
+    return {data.text for data in element.iter("Data")}
+
+
+def edit_profile(profile_clear_path, skullUpgrades, add=False, *args, **kwargs):
+
+    tree = ET.parse(profile_clear_path)
+    root = tree.getroot()
+
+    for profile in root.iter("Profile"):
+        print("Current profile name:", profile.get("name"))
+
+        for entry in root.iter("Entry"):
+            if entry.get("key") == "SkullUpgrades":
+                upgrades = get_skull_upgrades(entry)
+
+                if add:
+                    upgrades.update(skullUpgrades)
+                else:
+                    upgrades -= set(skullUpgrades)
+
+                # Clear current data elements
+                entry.clear()
+
+                # Replace by updated set of upgrades
+                for upgrade in upgrades:
+                    ET.SubElement(entry, "Data").text = upgrade
+
+                # print("new upgrades:", upgrades)
+                # print(entry.attrib, upgrades)
+                # for data in entry.iter("Data"):
+                #     print(data.text)
+
+                print("skullUpgrades updated!")
 
 
 def args_to_param(args):
