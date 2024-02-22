@@ -200,7 +200,6 @@ def decrypt(profile, *args, skull_upgrades=None, **kwargs):
         # text += MAPPING.get(byte, " ") #f"x{hex(byte)}")
         text += MAPPING.get(byte, f"|{hex(byte)}|")
 
-    # print(text)
     profile_clear_path = Path(profile_path.parent / "profiles_clear.xml")
     profile_clear_path.write_text(text, encoding="utf8")
 
@@ -343,7 +342,6 @@ def main():
 
     # Get program args and launch associated command
     args = parser.parse_args()
-    print(args)
     if "func" not in dir(args):
         # Nor argument
         parser.print_usage()
