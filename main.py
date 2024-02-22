@@ -220,7 +220,11 @@ def crypt(profile, *args, **kwargs):
         print("Error: Character not known in the charset:", e)
         raise SystemExit(42) from e
 
-    Path(profile_clear_path.parent / "profiles.xml").write_bytes(data)
+    # Make a backup of the previous profile
+    crypt_profile = Path(profile_clear_path.parent / "profiles.xml")
+    crypt_profile.rename(str(crypt_profile) + ".bak")
+    # Write data
+    crypt_profile.write_bytes(data)
 
 
 def get_skull_upgrades(element):
