@@ -106,7 +106,7 @@ SKULLUPGRADES = {
 }
 
 
-def decrypt(profile, *args, skull_upgrades=None, **kwargs):
+def decrypt(profile, *args, **kwargs):
     """Decrypt the original profile and export it to a clear XML file"""
     profile_path = Path(profile)
     data = profile_path.read_bytes()
@@ -117,8 +117,8 @@ def decrypt(profile, *args, skull_upgrades=None, **kwargs):
     profile_clear_path = Path(profile_path.parent / "profiles_clear.xml")
     profile_clear_path.write_text(text, encoding="utf8")
 
-    if skull_upgrades:
-        edit_profile(profile_clear_path, skull_upgrades, *args, **kwargs)
+    if kwargs:
+        edit_profile(profile_clear_path, *args, **kwargs)
 
 
 def crypt(profile, *args, **kwargs):
@@ -152,7 +152,14 @@ def show_skull_upgrades(upgrades) -> list:
     return [SKULLUPGRADES[upgr] for upgr in upgrades]
 
 
-def edit_profile(profile_clear_path, skull_upgrades, *args, remove=False, **kwargs):
+def edit_profile(
+    profile_clear_path,
+    *args,
+    skull_upgrades=tuple(),
+    remove=False,
+    level=None,
+    **kwargs,
+):
     """Edit the xml file by adding or removing the given upgrades
 
     :param skull_upgrades: Iterable of skull upgrade ids.
@@ -164,8 +171,11 @@ def edit_profile(profile_clear_path, skull_upgrades, *args, remove=False, **kwar
     skull_upgrades = SKULLUPGRADES.keys() & set(skull_upgrades)
 
     # Display todo
-    alert = "Removing" if remove else "Adding"
-    print("{}: '{}'".format(alert, "', '".join(show_skull_upgrades(skull_upgrades))))
+    if skull_upgrades:
+        alert = "Removing" if remove else "Adding"
+        print(
+            "{}: '{}'".format(alert, "', '".join(show_skull_upgrades(skull_upgrades)))
+        )
 
     # Modification of XML Element Tree
     tree = ET.parse(profile_clear_path)
@@ -175,7 +185,7 @@ def edit_profile(profile_clear_path, skull_upgrades, *args, remove=False, **kwar
         print("Current profile name:", profile.get("name"))
 
         for entry in root.iter("Entry"):
-            if entry.get("key") == "SkullUpgrades":
+            if skull_upgrades and entry.get("key") == "SkullUpgrades":
                 upgrades = get_skull_upgrades(entry)
 
                 if remove:
@@ -210,6 +220,11 @@ def edit_profile(profile_clear_path, skull_upgrades, *args, remove=False, **kwar
 
                 print(current_state)
                 print("skullUpgrades updated!")
+
+            if level and entry.get("key") == "CharacterLevel":
+                data = next(entry.iter("Data"))
+                print(f"Replacing level {data.text} by {level}")
+                data.text = str(level)
 
     # Write our new etree
     tree.write("profiles_clear.xml")
@@ -260,6 +275,8 @@ def main():
         nargs="*",
         default=tuple(),
     )
+
+    parser_decrypt.add_argument("-l", "--level", help="Set player level", type=int)
 
     parser_encrypt = subparsers.add_parser(
         "encrypt",
