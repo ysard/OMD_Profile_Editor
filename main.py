@@ -158,6 +158,7 @@ def edit_profile(
     skull_upgrades=tuple(),
     remove=False,
     level=None,
+    nightmare=False,
     **kwargs,
 ):
     """Edit the xml file by adding or removing the given upgrades
@@ -225,6 +226,17 @@ def edit_profile(
                 data = next(entry.iter("Data"))
                 print(f"Replacing level {data.text} by {level}")
                 data.text = str(level)
+            if nightmare and entry.get("key") == "Nightmare":
+                # Data element can be absent
+                print(f"Enabling nightmare mode")
+                try:
+                    data = next(entry.iter("Data"))
+                except StopIteration:
+                    data = ET.SubElement(entry, "Data", attrib={"type": "Bool"})
+                    # Pretty-print the Entry tag and its children
+                    ET.indent(entry, space="\t", level=2)
+
+                data.text = "1"
 
     # Write our new etree
     tree.write("profiles_clear.xml")
@@ -277,6 +289,8 @@ def main():
     )
 
     parser_decrypt.add_argument("-l", "--level", help="Set player level", type=int)
+
+    parser_decrypt.add_argument("-n", "--nightmare", help="Enable the nightmare mode", action="store_true")
 
     parser_encrypt = subparsers.add_parser(
         "encrypt",
