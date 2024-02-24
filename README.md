@@ -17,6 +17,9 @@ Decrypt usage:
     -h, --help            show this help message and exit
     -p PROFILE, --profile PROFILE
                           Input profile file. (default: profiles.xml)
+    -l LEVEL, --level LEVEL
+                          Set player level (default: None)
+    -n, --nightmare       Enable the nightmare mode (default: False)
 
     Update SkullUpgrades set:
     -r, --remove          Remove the upgrades (Add by default) (default: False)
