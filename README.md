@@ -57,7 +57,7 @@ Dependencies:
 To add the upgrade "masse métronome", first decrypt the profile and add the correct
 id to the `-s` argument:
 
-    $ main.py decrypt -s 22 <path_to_savegame>/profiles.xml
+    $ main.py decrypt -s 22 -p <path_to_savegame>/profiles.xml
 
 A readable and editable `profiles_clear.xml` file is created.
 
