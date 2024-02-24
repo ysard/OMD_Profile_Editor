@@ -226,6 +226,7 @@ def edit_profile(
                 data = next(entry.iter("Data"))
                 print(f"Replacing level {data.text} by {level}")
                 data.text = str(level)
+
             if nightmare and entry.get("key") == "Nightmare":
                 # Data element can be absent
                 print(f"Enabling nightmare mode")
